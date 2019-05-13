@@ -43,27 +43,27 @@
   date: 2019-06-04
   info: Basics of function approximation
 -
-  date: 2018-06-05
+  date: 2019-06-05
   info: Many interpretations of kernels
 -
-  date: 2018-06-06
+  date: 2019-06-06
   info: Gaussian processes and kernel learning
 -
-  date: 2018-06-07
+  date: 2019-06-07
   break: Dragon Boat Festival
 #
 # ==================
 # Week 4
 #
 -
-  date: 2018-06-11
+  date: 2019-06-11
   info: Matrices associated with graphs
 -
-  date: 2018-06-12
+  date: 2019-06-12
   info: Function approximation on graphs
 -
-  date: 2018-06-13
+  date: 2019-06-13
   info: Graph clustering and partitioning
 -
-  date: 2018-06-14
+  date: 2019-06-14
   info: Centrality measures
