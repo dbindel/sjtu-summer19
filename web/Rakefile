@@ -1,7 +1,7 @@
 desc "Manage web site publication"
 
 # Settings
-dest = "cslinux:/people/dsb253/class/sjtu-summer18"  # Destination
+dest = "cslinux:/people/dsb253/class/sjtu-summer19"  # Destination
 
 # === Check hash version
 
@@ -37,7 +37,7 @@ task :build do
     puts("Already built")
   else
     sh "(cd ../lec; make; make copy)"
-    sh "(cd ../hw; make; make copy)"
+    #sh "(cd ../hw; make; make copy)"
     sh "jekyll build"
   end
 end

@@ -5,13 +5,9 @@ layout:     main
 
 ## Logistical information
 
-Summer 2018: Numerical Methods for Data Science  
-Lecture time: Tue 8:00-9:40, Wed 2:00-3:40, Thu 8:00-9:40, Fri 8:00-9:40  
-Lecture place: Lower Hall 212  
+Summer 2019: Numerical Methods for ML and Data Science  
 Prof: [David Bindel](http://www.cs.cornell.edu/~bindel)  
 E-mail: <bindel@cs.cornell.edu>  
-Office hours: 515 Zhiyuan College, 10:30-12:00, Tues-Thurs  
-TAs: Yurong You and Xinran Zhu  
 
 ## Course description
 

@@ -8,6 +8,6 @@ if [[ -z $DBUS_SESSION_BUS_ADDRESS ]]; then
   fi
 fi
 
-cd /home/bindel/work/class/sjtu-summer18/web
+cd /home/bindel/work/class/sjtu-summer19/web
 git pull origin
 rake deploy

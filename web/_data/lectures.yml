@@ -8,99 +8,62 @@
 # Week 1
 #
 -
-  date: 2018-06-12
+  date: 2019-05-21
   info: Introduction and optimization basics
-  notes: 2018-06-12.pdf
-  hw:
-    - info: HW 1 (due 06-19)
-      file: 2018-06-12.pdf
 -
-  date: 2018-06-13
+  date: 2019-05-22
   info: Linear least squares and regularization
-  notes: 2018-06-13.pdf
-  hw:
-    - info: HW 2 (due 06-20)
-      file: 2018-06-13.pdf
 -
-  date: 2018-06-14
+  date: 2019-05-23
   info: Regularizing least squares and gradient descent
-  notes: 2018-06-14.pdf
 -
-  date: 2018-06-15
+  date: 2019-05-24
   info: Stochastic gradients, scaling, and Newton
-  notes: 2018-06-15.pdf
-  hw:
-    - info: HW 3 (due 06-22)
-      file: 2018-06-15.pdf
 #
 # ==================
 # Week 2
 #
 -
-  date: 2018-06-19
+  date: 2019-05-28
   info: Latent factor models
-  notes: 2018-06-19.pdf
-  hw:
-    - info: HW 4 (due 06-26)
-      file: 2018-06-19.pdf
 -
-  date: 2018-06-20
+  date: 2019-05-29
   info: SVD and other low rank decompositions
-  notes: 2018-06-20.pdf
-  hw:
-    - info: HW 5 (due 06-27)
-      file: 2018-06-20.pdf
 -
-  date: 2018-06-21
+  date: 2019-05-30
   info: Non-negative matrix factorization
-  notes: 2018-06-21.pdf
 -
-  date: 2018-06-22
+  date: 2019-05-31
   info: Matrix completion
-  notes: 2018-06-22.pdf
-  hw:
-    - info: HW 6 (due 07-01)
-      file: 2018-06-22.pdf
 #
 # ==================
 # Week 3
 #
 -
-  date: 2018-06-26
+  date: 2019-06-04
   info: Basics of function approximation
-  notes: 2018-06-26.pdf
-  hw:
-    - info: HW 7 (due 07-02)
-      file: 2018-06-26.pdf
 -
-  date: 2018-06-27
+  date: 2018-06-05
   info: Many interpretations of kernels
-  notes: 2018-06-27.pdf
 -
-  date: 2018-06-28
+  date: 2018-06-06
   info: Gaussian processes and kernel learning
-  notes: 2018-06-28.pdf
 -
-  date: 2018-06-29
-  info: Scaling kernel methods
+  date: 2018-06-07
+  break: Dragon Boat Festival
 #
 # ==================
 # Week 4
 #
 -
-  date: 2018-07-03
+  date: 2018-06-11
   info: Matrices associated with graphs
-  notes: 2018-07-03.pdf
 -
-  date: 2018-07-04
+  date: 2018-06-12
   info: Function approximation on graphs
-  notes: 2018-07-04.pdf
-  hw:
-    - info: HW 7 (due 07-07)
-      file: 2018-07-04.pdf
 -
-  date: 2018-07-05
+  date: 2018-06-13
   info: Graph clustering and partitioning
 -
-  date: 2018-07-06
+  date: 2018-06-14
   info: Centrality measures
