@@ -1,0 +1,41 @@
+\documentclass[12pt, leqno]{article} %% use to set typesize
+\input{common}
+
+\begin{document}
+\hdr{2019-05-22}{2019-05-22}
+
+\paragraph*{1: Constrained least squares}
+Consider the least squares problem
+\[
+  \mbox{minimize } \|Ax-b\|^2 \mbox{ s.t. } \sum_{j=1}^n x_i = 1.
+\]
+Write down the KKT conditions for this problem and write a short code
+in your favorite language to solve the problem given an economy QR
+factorization $A = QR$.
+
+\paragraph*{2: Residual sensitivity}
+In this exercise, we will analyze how sensitive the norm of the least
+squares residual is to perturbations in $A$.
+\begin{enumerate}
+\item
+  Differentiate the expression $r^T r = \|r\|^2$ to show that
+  \[
+    \delta \|r\| = \frac{r^T (\delta r)}{\|r\|}.
+  \]
+\item
+  Differentiate the relationship $A^T r = 0$ and pre-multiply by $r^T$
+  to get that
+  \[
+    \delta \|r\| = \frac{-r^T (\delta A) x}{\|r\|}.
+  \]
+  {\em Hint:} It helps to recall that $A^T r = 0$.
+\end{enumerate}
+From the last inequality, a standard norm bound shows that
+\[
+  \delta \|r\| \leq \|\delta A\| \|x\|,
+\]
+i.e.~the residual magnitude can only change significantly with a small
+change to $A$ if the coefficients in the least squares solve were large.
+
+
+\end{document}

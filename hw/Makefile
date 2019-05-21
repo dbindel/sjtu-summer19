@@ -1,7 +1,8 @@
 TEXINPUTS:=.
 
 HW= \
-	pdf/2019-05-21.pdf
+	pdf/2019-05-21.pdf \
+	pdf/2019-05-22.pdf
 
 .PHONY: all copy
 all: $(HW)
