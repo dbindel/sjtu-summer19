@@ -17,12 +17,18 @@
 -
   date: 2019-05-22
   info: Linear least squares and regularization
+  notes: 2019-05-22.pdf
+  hw:
+    - info: HW 2 (due 05-29)
+      file: 2019-05-22.pdf
 -
   date: 2019-05-23
   info: Regularizing least squares and gradient descent
+  notes: 2019-05-23.pdf
 -
   date: 2019-05-24
   info: Stochastic gradients, scaling, and Newton
+  notes: 2019-05-24.pdf
 #
 # ==================
 # Week 2
