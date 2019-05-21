@@ -10,6 +10,10 @@
 -
   date: 2019-05-21
   info: Introduction and optimization basics
+  notes: 2019-05-21.pdf
+  hw:
+    - info: HW 1 (due 05-28)
+      file: 2019-05-21.pdf
 -
   date: 2019-05-22
   info: Linear least squares and regularization
