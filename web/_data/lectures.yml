@@ -25,6 +25,9 @@
   date: 2019-05-23
   info: Regularizing least squares and gradient descent
   notes: 2019-05-23.pdf
+  hw:
+    - info: HW 3 (due 05-30)
+      file: 2019-05-23.pdf
 -
   date: 2019-05-24
   info: Stochastic gradients, scaling, and Newton

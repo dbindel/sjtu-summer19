@@ -1,0 +1,60 @@
+\documentclass[12pt, leqno]{article} %% use to set typesize
+\input{common}
+
+\begin{document}
+\hdr{2019-05-23}{2019-05-30}
+
+
+\paragraph*{1: Regularized residual}
+The normal equations can be written as a system of two equations
+in two block unknowns as
+\[
+  \begin{bmatrix} I & A \\ A^T & 0 \end{bmatrix}
+  \begin{bmatrix} r \\ x \end{bmatrix} =
+  \begin{bmatrix} b \\ 0 \end{bmatrix}
+\]
+In this problem, we extend this approach to the least squares problem
+with regularization
+\begin{enumerate}
+\item
+  Show that the solution to the problem
+  \[
+    \mbox{minimize } \|b-Ax\|^2 + \lambda \|x\|^2
+  \]
+  can be written in the form
+  \[
+    \begin{bmatrix} I & A \\ A^T & -\lambda I \end{bmatrix}
+    \begin{bmatrix} r \\ x \end{bmatrix} =
+    \begin{bmatrix} b \\ 0 \end{bmatrix}.
+  \]
+\item
+  Use Gaussian elimination on the preceding equations to get a linear
+  equation in $r$ alone.
+\item
+  Based on the equation in the previous step, compute the
+  derivative $dr/d\lambda$ at $\lambda = 0$.
+\end{enumerate}
+
+
+\paragraph*{2: Modified Landweber}
+Consider a modification to the Landweber iteration associated with
+gradually decreasing step sizes
+\[
+  x^{k+1} = x^k - \frac{\alpha}{k+1} A^T (Ax^k-b).
+\]
+\begin{enumerate}
+\item
+  Show that this iteration converges for any
+  positive $\alpha$.
+\item
+  Argue that step $k$ of the iteration is equivalent to
+  applying the regularized least squares solve
+  \[
+    x^{k} = V f_k(\Sigma)^{-1} U^T
+  \]
+  Write a code to plot $f_k$ on $[0,1]$ for $\alpha = 1$
+  and $k = 1, 2, \ldots, 10$.
+\end{enumerate}
+
+
+\end{document}
