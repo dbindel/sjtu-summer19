@@ -32,6 +32,9 @@
   date: 2019-05-24
   info: Stochastic gradients, scaling, and Newton
   notes: 2019-05-24.pdf
+  hw:
+    - info: HW 4 (due 05-31)
+      file: 2019-05-24.pdf
 #
 # ==================
 # Week 2
