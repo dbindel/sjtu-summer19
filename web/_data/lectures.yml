@@ -42,15 +42,19 @@
 -
   date: 2019-05-28
   info: Latent factor models
+  notes: 2019-05-28.pdf
 -
   date: 2019-05-29
   info: SVD and other low rank decompositions
+  notes: 2019-05-29.pdf
 -
   date: 2019-05-30
   info: Non-negative matrix factorization
+  notes: 2019-05-30.pdf
 -
   date: 2019-05-31
   info: Matrix completion
+  notes: 2019-05-31.pdf
 #
 # ==================
 # Week 3
