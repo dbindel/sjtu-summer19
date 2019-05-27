@@ -1,0 +1,41 @@
+\documentclass[12pt, leqno]{article} %% use to set typesize
+\input{common}
+
+\begin{document}
+\hdr{2019-05-30}{2019-06-05}
+
+\paragraph*{1: HALS-RRI}
+Implement the RRI iteration and apply it to the test problem in
+{\tt demo\_nmf}.  Use {\tt svd\_nmf\_init} for an initial starting
+point, and run for 100 iterations.  Demonstrate the convergence
+by giving a semilog plot of $r_k-r_{\mathrm{final}}$ where $r = \|A-WH\|_F$.
+
+\paragraph*{2: AA-HALS-RRI}
+Acceleration methods convert a slowly-converging sequences into more
+rapidly convergent sequences by learning patterns in the relations
+between steps.  Anderson acceleration is an acceleration method
+that applies specifically to fixed point iterations of the form
+\[
+  x^{k+1} = G(x^k)
+\]
+transforming to a new iteration
+\[
+  \tilde{x}^{k+1} = \sum_{j=0}^{m-1} \alpha_j G(\tilde{x}^{k-j})
+\]
+where the coefficients $\alpha_j$ are learned from looking
+at the relation between $\tilde{x}^{k-j}$ and $G(\tilde{x}^{k-j})$
+over several steps.
+%
+A simple code to run a step of Anderson acceleration is included
+in the class repository.  Use this code to accelerate the convergence
+of RRI in the previous problem, starting about 20 steps in.
+Again demonstrate the convergence by giving a semilog plot
+of the $r_k-r_{\mathrm{final}}$.
+
+{\bf Note:} In order to use Anderson acceleration, you will need
+to pack the matrices $W$ and $H$ into a single vector $x$ at each
+step (and then unpack afterward).  You can do this using MATLAB's
+{\tt reshape} command.
+
+
+\end{document}

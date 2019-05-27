@@ -47,10 +47,16 @@
   date: 2019-05-29
   info: SVD and other low rank decompositions
   notes: 2019-05-29.pdf
+  hw:
+    - info: HW 5 (due 06-04)
+      file: 2019-05-29.pdf
 -
   date: 2019-05-30
   info: Non-negative matrix factorization
   notes: 2019-05-30.pdf
+  hw:
+    - info: HW 6 (due 06-05)
+      file: 2019-05-30.pdf
 -
   date: 2019-05-31
   info: Matrix completion
