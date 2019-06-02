@@ -70,13 +70,19 @@
 #
 -
   date: 2019-06-04
-  info: Basics of function approximation
+  info: Many interpretations of kernels
+  hw:
+    - info: HW 8 (due 06-11)
+      file: 2019-06-04.pdf
 -
   date: 2019-06-05
-  info: Many interpretations of kernels
+  info: Approaches to kernel selection
+  hw:
+    - info: HW 9 (due 06-12)
+      file: 2019-06-05.pdf
 -
   date: 2019-06-06
-  info: Gaussian processes and kernel learning
+  info: Computing with GPs
 -
   date: 2019-06-07
   break: Dragon Boat Festival

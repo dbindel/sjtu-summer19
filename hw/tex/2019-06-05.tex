@@ -1,0 +1,30 @@
+\documentclass[12pt, leqno]{article} %% use to set typesize
+\input{common}
+
+\begin{document}
+\hdr{2019-06-05}{2019-06-12}
+
+\paragraph*{1: How many factors?}
+The (economy) pivoted QR factorization is used for factor selection
+least squares; we compute
+\[
+  A \Pi = QR
+\]
+and then only fit based on the first $k$ columns of $\Pi$.
+Given $Q$ and $b$, write a code to compute the mean LOOCV statistic
+\[
+  \mbox{LOOCV} = \frac{1}{m} \sum_{i=1}^m r_{(-i)}^2
+\]
+for $k = 1, \ldots, n$.  Ideally, your code should take $O(mn)$ time.
+
+{\em Note:} You really do only need $Q$ and $b$!
+
+\paragraph*{2: Maximum likelihood for least squares}
+Consider the statistical model
+\[
+  y = Ax + e
+\]
+where $e \sim \mathcal{N}(0, \sigma^2 I)$.  Derive the maximum
+likelihood estimates for $x$ and $\sigma^2$ given observed data $y$.
+
+\end{document}
