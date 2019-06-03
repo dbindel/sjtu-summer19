@@ -71,12 +71,14 @@
 -
   date: 2019-06-04
   info: Many interpretations of kernels
+  notes: 2019-06-04.pdf
   hw:
     - info: HW 8 (due 06-11)
       file: 2019-06-04.pdf
 -
   date: 2019-06-05
   info: Approaches to kernel selection
+  notes: 2019-06-05.pdf
   hw:
     - info: HW 9 (due 06-12)
       file: 2019-06-05.pdf
