@@ -396,39 +396,78 @@ the pivoted Cholesky factorization
 \]
 where the diagonal elements of $R$ appear in descending order and
 the off-diagonal elements in each row of $R$ are dominated by the
-diagonal element.  The (left-looking) pivoted Cholesky algorithm
-looks very much like the ordinary left-looking Cholesky algorithm,
-except that we need to maintain the diagonal of the Schur complement
-matrix explicitly:
-\begin{lstlisting}
-  piv = 1:n;        % Keep track of permutation
-  diagS = diag(K);  % Keep track of the diagonal
-  for j = 1:n
+diagonal element.  The pivoted Cholesky factorization algorithm looks
+very much like the standard Cholesky algorithm, except before adding
+row $j$ to the $R$ factor, we first swap rows and columns $j$ and
+$j_{\max}$ of $K$, where $j_{\max}$ is the index of the largest entry
+in the Schur complement matrix.
 
-    % Find largest diagonal element in Schur complement
-    [sjj, idxj] = max(diagS(j:end));
-    idx = idx + j - 1;
+The approximation error associated with truncating the pivoted
+Cholesky factorization is just the Schur complement matrix;
+that is (suppressing the permutation momentarily),
+\[
+  \begin{bmatrix} K_{11} & K_{12} \\ K_{21} & K_{22} \end{bmatrix} -
+  \begin{bmatrix} R_{11}^T \\ R_{12}^T \end{bmatrix}
+  \begin{bmatrix} R_{11} & R_{12} \end{bmatrix} =
+  \begin{bmatrix} 0 & 0 \\ 0 & K_{22} - R{12}^T R_{12} \end{bmatrix}
+\]
+Typically, we would stop the
+factorization when all the diagonal elements in the Schur
+complement are less than some tolerance.  Because the Schur complement
+is positive definite, the sum of the diagonal elements in the Schur
+complement is the same as the nuclear norm of the Schur complement,
+so controlling the size of the largest diagonal element also controls
+the approximation error in the nuclear norm (which dominates both the
+Frobenius norm and the spectral norm).
 
-    % Swap with row/col j
-    if idx ~= j
-      piv([j, idx]) = piv([idx, j]);
-      K([j, idx], :) = K([idx, j], :);
-      K(:, [j, idx]) = K(:, [idx, j]);
-    end
+Part of what makes pivoted Cholesky attractive is that we can run
+the algorithm {\em without ever forming $K$} --- we only need the rows
+of $K$ associated with the pivots selected up to the current step,
+plus a running computation of the diagonal of the Schur complement.
+If we have formed $j-1$ steps of the pivoted Cholesky factorization,
+we can extend the factorization by:
+\begin{itemize}
+\item Searching the Schur complement diagonal $d$ to find
+  the pivot row $j_{\max}$ and swapping points $j$ and
+  $j_{\max}$ and columns $j$ and $j_{\max}$ of $R$ (and $d$).
+\item Forming the top row of the current Schur complement using the formula
+  \[
+    s_{jl} = k(x_j, x_l) - \sum_{i=1}^{j-1} r_{ij} r_{il}
+  \]
+\item Extending the factorization with $s_{jj} = \sqrt{s_{jj}}$ and 
+  $r_{jl} = s_{jl} / r_{jj}$ for $l > j$.
+\item Updating the diagonal of the Schur complement via
+  $d_{ll}^{\mathrm{new}} = d_{ll} - r_{jl}^2$.
+\end{itemize}
+Running pivoted Cholesky in this way for $r$ steps only requires
+$O(nr)$ kernel evaluations, $O(nr)$ storage, and $O(nr^2)$ time.
 
-    % Extend the Cholesky factor
-    K(j,j) = sqrt(sjj);
-    K(j,1:j-1) = K(j,1:j-1) / K(j,j);
-    
-    % Update the diagonal 
-  end
-\end{lstlisting}
-
-For positive definite matrices, the trace is the same as the nuclear
-norm, which dominates the Frobenius norm.  So we can easily bound the
-Frobenius norm error associated with
+Pivoted Cholesky gives us the factorization
+\[
+  (K+\sigma^2 I) \approx (R_1^T R_1 + \sigma^2 I).
+\]
 
 \subsection{Fitting with a tail}
+
+We can also use the pivoted Cholesky approach combined with the
+Gaussian elimination approach to solve a problem with
+a conditionally positive definite kernel and a tail term.  To do this,
+we first find a strongly linearly independent set of rows of $P$; we
+can do this by pivoted QR on $P^T$ or by Gaussian elimination with
+partial pivoting.  Once we have this set, as before we write $c$ as
+\[
+  \begin{bmatrix} c_1 \\ c_2 \end{bmatrix} =
+  \begin{bmatrix} -W^T \\ I \end{bmatrix} c_2
+\]
+where $W = P_2 P_1^{-1}$.  We then  
+solve the reduced (positive definite) system $\tilde{K}_{22} c_2 = y_2$
+where
+\[
+  \tilde{K}_{22} = K_{22} - W K_{12} - K_{21} W^T + W K_{11} W.
+\]
+Even though the original matrix is not positive definite,
+$\tilde{K}_{22}$ is.  Moreover, we can dynamically form the elements
+of $\tilde{K}_{22}$ as they are needed.
 
 \subsection{Likelihoods and gradients}
 
