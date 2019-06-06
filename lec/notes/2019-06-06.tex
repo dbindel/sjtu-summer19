@@ -440,6 +440,8 @@ we can extend the factorization by:
 Running pivoted Cholesky in this way for $r$ steps only requires
 $O(nr)$ kernel evaluations, $O(nr)$ storage, and $O(nr^2)$ time.
 
+
+
 %% \subsection{Fitting with a tail}
 
 %% We can also use the pivoted Cholesky approach combined with the
@@ -704,36 +706,69 @@ we used for kernel solves, we have
   \log \det(K) = 2 \sum_{j=1}^r \log(r_{jj}) - (n-r) \log \eta.
 \]
 
-What of the derivative of the log likelihood?  Here we face a somewhat
-subtle issue: the derivative of the approximate kernel matrix depends
-not only on the kernel function, but also on the low rank
-approximation scheme.  For concreteness, we will differentiate the
-truncated Cholesky approximation assuming a fixed pivot ordering.
-That is, if $\mathcal{I}$ consists of the first $r$ indices selected by
-pivoted Cholesky at the current point, we use the approximation
+What of the derivative of the log likelihood?  That is, we would like
+a fast method to compute
 \[
-  \tilde{K} = K_{:,\calI} K_{\calI \calI}^{-1} K_{:,\calI}^T + \eta I.
+  \delta L = \frac{1}{2} c^T (\delta \tilde{K}) c -
+             \frac{1}{2} \tr(\tilde{K}^{-1} \delta \tilde{K}).
 \]
-A general derivative of $\tilde{K}$ looks like
+We can simplify the latter term by observing that
+\[
+  \tilde{K}^{-1} = \frac{1}{\eta} (I - Q_1 Q_1^T)
+\]
+where
+\[
+  \begin{bmatrix} W \\ \sqrt{\eta I} \end{bmatrix} =
+  \begin{bmatrix} Q_1 \\ Q_2 \end{bmatrix} R;
+\]
+substitution and using properties of traces gives us
+\[
+  \tr(\tilde{K}^{-1} \delta \tilde{K}) =
+    \frac{1}{\eta} \left( \tr(\delta \tilde{K}) -
+    \tr(Q_1^T \delta \tilde{K} Q_1) \right).
+\]
+If we work with the original kernel, it is difficult to do better
+than this.
+
+Now suppose we differentiate the log-likelihood for the approximate
+kernel induced by the points $\calI$, i.e.
+\[
+  \tilde{K}_{XX} = K_{X \calI} K_{\calI \calI}^{-1} K_{\calI X} + \eta I.
+\]
+Differentiating this expression gives us
 \[
   \delta \tilde{K} =
     (\delta K_{:,\calI}) F^T + F (\delta K_{:,\calI})^T -
-    F (\delta K_{\calI \calI} F^T) + (\delta \eta) I
+    F (\delta K_{\calI \calI}) F^T + (\delta \eta) I
 \]
-where $F = K_{:,\calI} K_{\calI \calI}^{-1}$
+where $F = K_{:,\calI} K_{\calI \calI}^{-1}$.  Therefore
+\begin{align*}
+  \frac{1}{2} c^T (\delta K) c &=
+  (\delta K_{:,\calI} c)^T (Fc)
+  - \frac{1}{2} (Fc)^T (\delta K_{II}) (Fc) +
+  \frac{1}{2} \|c\|^2 \delta \eta \\
+  \frac{1}{2} \tr(\tilde{K}^{-1} \delta \tilde{K}) &=
+    \langle \tilde{F}, \delta K_{:,\calI} \rangle_F -
+    \frac{1}{2} \langle \tilde{F}, F \delta K_{\calI \calI} \rangle_F
+    + \delta \eta \left( n - \|Q_1\|_F^2 \right) \\
+  \tilde{F} &\equiv \frac{1}{\eta} (I-Q_1 Q_1^T) F
+\end{align*}
+and so we can compute derivatives of the log likelihood in $O(nr)$ space
+and $O(nr^2)$ time in this approximation.
 
 \subsection{Beyond low rank}
 
-\section{From factorization to iteration}
-
-\subsection{Kernel selection and fast MVMs}
-
-\subsection{Krylov subspaces and function approximation}
-
-\section{Fast MVMs and scalable methods}
-
-\subsection{Preconditioned Conjugate Gradients (PCG)}
-
-\subsection{Stochastic trace and diagonal estimation}
+For a number of kernels, the kernel matrix is not all that low rank
+--- the singular values decay, but not so quickly that we would be
+happy with $O(nr^2)$ time algorithms.  However, in low-dimensional
+spaces, one may still have low-rank {\em submatrices}, and there are
+fast factorization techniques based on these rank-structured matrices
+as well.   There are also a variety of iterative solvers that take
+advantage of fast matrix-vector multiplies; for example, we can use
+the method of conjugate gradients (CG) to solve linear systems using
+only matrix-vector products with a kernel matrix.  For these types of
+solvers, the low rank approximations using pivoted Cholesky as
+described above still give us a good {\em preconditioner} that can
+accelerate convergence.
 
 \end{document}
