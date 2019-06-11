@@ -481,11 +481,10 @@ from a low dimensional invariant subspaces of associated matrices:
   These Laplace features can also be seen in terms of a low-dimensional
   embedding of the graph nodes in a Euclidean space in order to
   optimally approximate the resistance distance.  More generally, if
-  we have a squared distance matrix $D^{\odot 2}$ between objects, then
-  the centered distance matrix
+  we have a squared distance matrix $A$ between objects
+  (i.e.~$a_{ij} = \|x_i-x_j\|^2$), then the centered distance matrix
   \[
-    B = \left(I-\frac{1}{n} ee^T \right) D^{(\odot 2)} \left(
-    I-\frac{1}{n} ee^T \right)
+    B = -\frac{1}{2} H A H, \quad H = I-\frac{1}{n} ee^T
   \]
   is a positive semi-definite Gram matrix, and the $r$
   eigenvectors of $B$ associated with the largest eigenvalues
@@ -511,17 +510,238 @@ Eigenvalue decompositions of matrices associated with (weighted)
 graphs give us a way of turning network information into (usually
 low-dimensional) geometry.  At the same time, graphs give us a
 formalism for capturing the essential features of a geometric data
-set.  For example, if we want to understand objects for which we have
-a lot of features, we might form a graph in which we connect nearest
-neighbors with respect to some similarity measure.
+set.
 
-\subsection{Kernelization}
+In this section, we are concerned with taking a data matrix
+\[
+  X = \begin{bmatrix} x_1 & x_2 & \ldots & x_n \end{bmatrix} \in
+  \bbR^{m \times n}
+\]
+and reducing to a low-dimensional data matrix
+\[
+  Y = \begin{bmatrix} y_1 & y_2 & \ldots & y_n \end{bmatrix} \in
+  \bbR^{d \times n}
+\]
+for $d \ll m$ by some method so that the $y_i$ are related to each
+other similarly to the way that the $x_i$ are related to each other.
+The simplest approach, of course, is to apply a linear transformation
+to map from the full data space to the reduced space.  This leads us
+to the usual principle component analysis approach, which we have
+discussed before, or to related methods.
+
+Another approach is to rely on a (usually implicit) {\em nonlinear}
+mapping that preserves relevant features.  The two approaches can be
+related via kernels; we refer to the nice paper of Kokiopoulou, Chen,
+and Saad for more details.  For example, if we want to understand
+objects for which we have a lot of features, we might form a graph in
+which we connect nearest neighbors with respect to some similarity
+measure.
 
 \subsection{Isomap}
 
+The Isomap algorithm is based on the idea that the data lie close to
+some $d$-dimensional smooth manifold in $m$-dimensional space.
+Manifolds are ``locally Euclidean,'' and so we suppose that the
+manifold is sufficiently smooth and sufficiently densely sampled
+that the ordinary Euclidean distance between nearby points are a
+reasonable estimate of the natural geodesic distance in the manifold.
+For points farther away, though, this assumption may not be good.
+Hence, we construct a graph over the data points by connecting points
+that are closer together than some $\epsilon$ (the $\epsilon$-Isomap)
+or connecting the $k$ nearest neighbors to each point {the $k$-Isomap).
+The weights on these edges are the ordinary Euclidean distances
+between the data points.  If nodes $i$ and $j$ are not directly
+connected to each other in the graph, we fill in an approximation to the
+(geodesic) pairwise distance using the shortest path through the
+graph, which we would typically compute using Dijkstra's method.  Once
+we have a pairwise distance matrix, we apply the multi-dimensional
+scaling idea to get a reduced coordinate system.
+
+What is the cost of the Isomap algorithm?  The answer depends
+enormously on the structure of the constructed graph.  In typical use
+cases, the network constructed by Isomap will be fairly sparse, and
+can be stored efficiently in memory.  The obvious problem comes when
+we try to work with the full (squared) distance matrix needed for the
+multi-dimensional scaling step.  If the constructed graph has bounded
+degree $k$, the computational cost of computing the matrix via
+Dijkstra's algorithm (with binary heaps) from each source is
+$O(n^2 k \log n)$; this can be marginally improved to $O(n(k + n \log n))$
+using a Fibonacci heap.  And if we materialize the whole matrix, the
+storage cost is $O(n^2)$.  We do not need the full eigendecomposition,
+and so a few steps of dense matrix-vector multiplication might suffice
+to estimate the extreme eigenvalues and eigenvectors.  But each such
+product is $O(n^2)$, which becomes uncomfortable for large $n$.
+
+% Landmark Isomap
+The {\em landmark} version of Isomap is faster than the original
+Isomap algorithm, and relies on an idea we have seen before.  Let $A$
+be a matrix of pairwise distances.  If these can be exactly embedded
+in $d$-dimensional space, then the matrix $A$ has rank at most $d+2$.
+Let $\mathcal{I}$ indicate a set of at least $d+2$ ``landmark'' nodes;
+then we can also use the approximation
+\begin{align*}
+  A
+  & \approx
+    A_{:,\mathcal{I}} A_{\mathcal{I} \mathcal{I}}^{-1} A_{\mathcal{I},:}.
+\end{align*}
+Note that this approximation only involves distances between the
+landmark points and all other points, rather than every possible pairwise
+distance.  This is much the same approximation we saw when looking at
+nearly smooth kernel matrices, but the landmark nodes $\mathcal{I}$
+are typically not chosen according to pivoted Cholesky in this setting.
+
+From here, there are several ways to proceed, each giving exact recovery
+in the case there is an exact $d$-dimensional embedding.  One approach
+is to apply the usual MDS scheme to the approximate squared
+distance matrix.  That is, compute
+\[
+  B \approx -\frac{1}{2} W A_{\mathcal{I} \mathcal{I}}^{-1} W,
+  \quad W = H A_{:,\mathcal{I}}.
+\]
+Then a good coordinate system is given by $U_d \Sigma_d$ where $U
+\Sigma V^T$ is the economy SVD of $W R_{\mathcal{I} \mathcal{I}}^{-1}$
+with $R_{\mathcal{I} \mathcal{I}}$ the Cholesky factor of
+$A_{\mathcal{I} \mathcal{I}}$.  Alternately, we may center the
+landmark distance $A_{\mathcal{I} \mathcal{I}}$ to obtain
+\[
+  B_{\mathcal{I} \mathcal{I}}
+  = -\frac{1}{2} H A_{\mathcal{I} \mathcal{I}} H
+\]
+and use the $d$ largest eigenvalues of $B_{\mathcal{I} \mathcal{I}}$
+as the basis for the embedding.
+
+% NB: Nested dissection + LR blocks does not seem to be in literature?
+
 \subsection{Local linear embeddings}
 
+In {em local linear embedding} (LLE), we again start with a
+neighborhood of each point $x_i$.  However, we now consider the local
+problem of choosing weights $w_{ij}$ for neighbors $j$ of $i$ such
+that
+\[
+  \left\| x_i - \sum_{j} w_{ij} x_j \right\|^2
+\]
+is minimal subject to the constraint\footnote{The method is actually
+  based on the implicit assumption that each point is approximately a
+  {\em convex} combination of the neighbors, i.e.~the weights should
+  be positive and should add to one.  However, we may not need to
+  explicitly enforce non-negativity.
+} that $\sum_j w_{ij} = 1$.
+These weight calculations are all small linear least squares
+problems, and can be done relatively efficiently.  Putting everything
+together, we week to minimize
+\[
+  \| (I-W) X^T \|_F^2
+\]
+subject to the constraint that the columns of $W$ sum to one and $W$
+has a specified sparsity pattern.  We then seek the reduced matrix $Y$
+to also minimize
+\[
+  \| (I-W) Y^T \|_F^2.
+\]
+Of course, we need some constraint in order for this minimization to
+make sense; a natural constraint is that $Y Y^T = I$ (though we may
+choose to center and rescale the result later).  In this case, we have
+that a solution consists of taking the columns of $Y^T$ to be the
+columns of $V$ associated with the smallest singular values in the
+singular value decomposition $I-W = U \Sigma V^T$.  Typically we would
+discard the trivial null vector associated with a constant vector.
+
 \subsection{Laplacian eigenmaps}
+
+The idea behind Laplacian eigenmaps is to construct a coordinate
+system from the Laplacian of a weighted neighborhood graph.  One
+chooses weights $w_{ij}$ to be $\exp(-\|x_i-x_j\|^2/t)$ for some $t$,
+or $w_{ij} = 1$ for nearby points and zero otherwise; then we seek
+$Y$ to minimize
+\[
+  \sum_{i,j} w_{ij} \|y_i-y_j\|^2 = \tr(Y L Y^T)
+\]
+subject to $Y D Y^T = I$, where $D$ is the weighted degree matrix and
+$L = D-W$ is the weighted graph Laplacian.  The solution to this
+problem is given by the matrix formed from eigenvectors associated
+with the smallest eigenvalues of the generalized problem
+\[
+  L u = \lambda D u.
+\]
+Noting that $L = D-W$ and pre-multiplying by $D^{-1}$, we have
+\[
+ (I-P^T) u = \lambda u
+\]
+where $P = WD^{-1}$ is the transition matrix for a Markov chain.
+If $\lambda$ is an eigenvalue of $I-P^T$, then $1-\lambda$ is an
+eigenvalue of $P^T$, and so the eigenvectors for $(L, D)$ associated
+with smallest eigenvalues are the same as the eigenvectors of $P^T$
+associated with the largest eigenvalues.
+
+\subsection{Additional notes}
+
+Compared to algorithms like LLE and Laplacian eigenmaps, the Isomap
+method has the advantage that it seeks not only to keep close points
+in the $X$ representation close in the $Y$ representation, but it
+also seeks to keep far points in the $X$ representation far in the $Y$
+representation.  The price we pay for this is that Isomap involves a
+dense intermediate matrix.
+
+All three methods that we have discussed can be seen as kernel methods
+with an (implicitly constructed) data-dependent kernel.  If we can
+extend this kernel to new points, we can use ordinary kernel
+interpolation to embed new (out-of-sample) data points $x$ to the
+corresponding $y$ points.  We have already implicitly described how to
+do this with landmark Isomap.  For local linear embedding, we compute
+a weighted combination of nearby points in the $X$ data set to
+approximate $x$, then apply that same linear combination to the
+approximate $y$.  And for Laplacian eigenmaps, we can apply the same
+interpolation procedures we described when we discussed
+semi-supervised learning with graph Laplacians in the last lecture.
+
+\section{Accuracy and numerical methods}
+
+The unsupervised learning methods discussed today ultimately rely on
+the solution to an extremal eigenvalue problem: we seek the largest
+(or smallest) eigenvalues and associated eigenvectors of a large
+matrix.  In most cases, we are more concerned with an {\em invariant
+  subspace} spanned by the few dominant eigenvectors; the exact basis
+that we use for that space may be less relevant.  The invariant
+subspace is stable to small perturbations if there is a large {\em
+  spectral gap} between the eigenvalues that we keep and the first
+eigenvalue we discard.  If our data is strongly clustered, or exhibits
+some low-dimensional structure, we may have prior reason to believe
+that there will be such a gap in the spectrum.  In this case, we can
+get a good approximate invariant subspace using any of a variety of
+tools, including Krylov solvers (Lanczos and Arnoldi and block
+variants), subspace iterations, randomized probing methods (which are
+essentially a special case of subspace iteration).  Sometimes, we can
+get away with even simpler approaches based on pivoted Cholesky
+factorization or factorization of a submatrix (a Nystrom approach).
+
+Unfortunately, there are cases where there is {\em not} a clear
+spectral gap.  This might happen because our model is not a
+particularly good fit to the data, or because of noise.  In this case,
+the invariant subspace is {\em ill-conditioned}: there are multiple
+solutions to the invariant subspace problem that are almost equally
+good, but involve different subspaces.  This may not be a problem:
+if several solutions fit the data equally well, we may be happy with
+any of them as models.  For example, if a graph naturally segments
+into three pieces, using normalized cuts for bisection is likely to
+separate one of the three pieces from the others, but which piece is
+selected may depend not only on the problem details but also on the
+accuracy to which the eigenvalue solve is computed.
+
+There are also cases in which we would like to get the {\em same}
+approximate invariant subspace --- or the same coordinate system
+derived from an invariant subspace --- independent of details of
+solver accuracy and use of randomness.  This may be important, for
+example, if we seek to produce results for a publication that can
+be exactly reproduced at a later date.  The problem of regularizing a
+trace optimization problem yielding an invariant subspace does not
+seem all that well explored, and so the best choice for optimization
+of the subspace may be to either use an accurate solver or to use
+a technique like pivoted factorization that may give better
+reproducibility at the cost of some amount of suboptimality in the
+optimization.  And once an invariant subspace is chosen, one may find it
+useful to apply some side normalization conditions in order to get a
+less sensitive coordinate system than the eigenvector coordinates.
 
 %% \section{Understanding large-scale eigenvalue solvers}
 
