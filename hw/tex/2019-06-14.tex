@@ -1,0 +1,23 @@
+\documentclass[12pt, leqno]{article} %% use to set typesize
+\input{common}
+
+\begin{document}
+\hdr{2019-06-14}{2019-06-24}
+
+\paragraph*{1: PageRank bounds}
+Show that the PageRank of any node $i$ is at least
+$[\alpha \pi_{\mathrm{ref}}]_{i}$.
+
+\paragraph*{2: Katz with more edges}
+Argue that adding an edge to a graph increases the Katz centrality of
+all nodes.
+
+\paragraph*{3: Estrada on average}
+For a symmetric matrix $A = Q \Lambda Q^T$, the matrix exponential is
+\[
+  \exp(A) = Q \exp(\Lambda) Q^T.
+\]
+Use this formula to write the Estrada centrality of a node as the
+weighted average of exponentials of eigenvalues of $A$.
+
+\end{document}
