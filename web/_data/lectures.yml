@@ -101,6 +101,9 @@
   date: 2019-06-12
   info: Function approximation on graphs
   notes: 2019-06-12.pdf
+  hw:
+    - info: HW 10 (due 06-24)
+      file: 2019-06-12.pdf
 -
   date: 2019-06-13
   info: Graph clustering and partitioning
