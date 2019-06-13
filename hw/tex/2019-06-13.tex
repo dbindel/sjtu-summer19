@@ -1,0 +1,40 @@
+\documentclass[12pt, leqno]{article} %% use to set typesize
+\input{common}
+
+\begin{document}
+\hdr{2019-06-13}{2019-06-24}
+
+\paragraph*{1: Ring around the rosie}
+Consider the undirected ring on $n$ nodes.  For $n = 5$, the Laplacian
+is
+\[
+L = \begin{bmatrix}
+       2 & -1 &  0  &  0 & -1 \\
+      -1 &  2 & -1  &  0 &  0 \\
+       0 & -1 &  2  & -1 &  0 \\
+       0 &  0 & -1  &  2 & -1 \\
+      -1 &  0 &  0  & -1 &  2
+    \end{bmatrix},
+\]
+and similarly for larger $n$.  For $n = 10$, plot the graph in 2D by
+placing each node according to the Laplacian eigenmap coordinates.
+Repeat with a tiny random change to the edge weights; what happens to
+the coordinates, and why?
+If you are using MATLAB, you may want to use the {\tt gplot} command.
+
+\paragraph*{2: Almost reducible chains}
+Consider an almost irreducible Markov chain with transition matrix
+\[
+  P = P^{\mathrm{ref}} + E, \quad
+  P^{\mathrm{ref}} = \begin{bmatrix} P_{11} & 0 \\ 0 & P_{22} \end{bmatrix}
+\]
+and suppose $P_{11}$ and $P_{22}$ are both ergodic with unique
+stationary vectors $\pi_1^*$ and $\pi_2^*$, respectively.
+We can approximate the stationary distribution of $P$ by
+\[
+  \hat{\pi} = \begin{bmatrix} \alpha \pi_1 \\ (1-\alpha) \pi_2 \end{bmatrix};
+\]
+show how to choose $\alpha$ to minimize the residual error
+$\|(I-P) \hat{\pi}\|^2$.
+
+\end{document}
